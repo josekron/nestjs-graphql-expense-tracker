@@ -20,7 +20,10 @@ export class ExpenseResolver {
       0,
     );
 
-    const expenseList: ExpenseListDto = new ExpenseListDto(expenses, total);
+    const expenseList: ExpenseListDto = new ExpenseListDto(
+      expenses,
+      Math.round(total * 100) / 100,
+    );
     return expenseList;
   }
 
