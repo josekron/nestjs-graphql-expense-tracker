@@ -1,6 +1,6 @@
 ### Description
 
-Expense Tracker API that allows to create users, and add and delete expenses.
+Expense Tracker GraphQL API that allows to create users, and add and delete expenses.
 
 I noticed that you can only find the same basic examples on the internet when you search for graphQL or PostgreSQL, and you can even forget to find something with both technologies running together. 
 
