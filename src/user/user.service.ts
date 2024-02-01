@@ -32,9 +32,9 @@ export class UserService {
     return newUser;
   }
 
-  async updateUserEmail(updateUserEmail: UpdateUserEmailInput): Promise<User> {
+  async updateUserEmail(userId: number, email: string): Promise<User> {
     const user: User = await this.usersRepository.findOne({
-      where: { id: updateUserEmail.userId },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -46,23 +46,23 @@ export class UserService {
     }
 
     // Email is the same so no changes
-    if (user.email === updateUserEmail.email) {
+    if (user.email === email) {
       return user;
     }
 
     const userFound: User = await this.usersRepository.findOne({
-      where: { email: updateUserEmail.email },
+      where: { email: email },
     });
 
-    if (userFound && userFound.id !== updateUserEmail.userId) {
-      throw new GraphQLError(`Use a different email ${updateUserEmail.email}`, {
+    if (userFound && userFound.id !== userId) {
+      throw new GraphQLError(`Use a different email ${email}`, {
         extensions: {
           code: HttpStatus.BAD_REQUEST,
         },
       });
     }
 
-    user.email = updateUserEmail.email;
+    user.email = email;
     await this.usersRepository.save(user);
     return user;
   }

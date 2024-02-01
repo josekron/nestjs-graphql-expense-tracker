@@ -18,7 +18,9 @@ export class UserResolver {
 
   @Query(() => [User])
   async getUsers(@FieldMap() fieldMap: typeof FieldMap): Promise<User[]> {
-    const includeExpenses = fieldMap['getUsers'].expenses ? true : false;
+    const includeExpenses: boolean = fieldMap['getUsers'].expenses
+      ? true
+      : false;
     const users: User[] = await this.userService.getUsers(includeExpenses);
     return users;
   }
@@ -35,7 +37,10 @@ export class UserResolver {
   async updateUserEmail(
     @Args('userEmailData') userEmailData: UpdateUserEmailInput,
   ): Promise<User> {
-    const user: User = await this.userService.updateUserEmail(userEmailData);
+    const user: User = await this.userService.updateUserEmail(
+      userEmailData.userId,
+      userEmailData.email,
+    );
     return user;
   }
 }
