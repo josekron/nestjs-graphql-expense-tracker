@@ -8,7 +8,7 @@ import { ExpenseListDto } from './expense.dto';
 export class ExpenseResolver {
   constructor(private expenseService: ExpenseService) {}
 
-  @Query(() => ExpenseListDto)
+  @Query(() => ExpenseListDto, { description: 'return the expenses of a user' })
   async getExpensesByUserId(
     @Args('userId', { type: () => Int }) userId: number,
   ): Promise<ExpenseListDto> {
@@ -27,7 +27,7 @@ export class ExpenseResolver {
     return expenseList;
   }
 
-  @Mutation(() => Expense)
+  @Mutation(() => Expense, { description: 'create an expense for a user' })
   async createExpense(
     @Args('createExpenseData')
     createExpenseData: CreateExpenseInput,
@@ -36,7 +36,7 @@ export class ExpenseResolver {
     return expense;
   }
 
-  @Mutation(() => Expense)
+  @Mutation(() => Expense, { description: 'delete an expense id' })
   async deleteExpense(
     @Args('id', { type: () => Int })
     id: number,

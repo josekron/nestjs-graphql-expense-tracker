@@ -8,7 +8,7 @@ import { FieldMap } from '@jenyus-org/nestjs-graphql-utils';
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-  @Query(() => User, { nullable: true })
+  @Query(() => User, { description: 'return the user id' })
   async getUserById(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<User> {
@@ -16,7 +16,7 @@ export class UserResolver {
     return user;
   }
 
-  @Query(() => [User])
+  @Query(() => [User], { description: 'return all users' })
   async getUsers(@FieldMap() fieldMap: typeof FieldMap): Promise<User[]> {
     const includeExpenses: boolean = fieldMap['getUsers'].expenses
       ? true
@@ -25,7 +25,7 @@ export class UserResolver {
     return users;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => User, { description: 'create a new user' })
   async createUser(
     @Args('createUserData') createUserData: CreateUserInput,
   ): Promise<User> {
@@ -33,7 +33,7 @@ export class UserResolver {
     return user;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => User, { description: 'update the email of a user' })
   async updateUserEmail(
     @Args('userEmailData') userEmailData: UpdateUserEmailInput,
   ): Promise<User> {

@@ -24,15 +24,27 @@ type ExpenseListDto {
 }
 
 type Query {
-  getUserById(id: Int!): User
+  """return the user id"""
+  getUserById(id: Int!): User!
+
+  """return all users"""
   getUsers: [User!]!
+
+  """return the expenses of a user"""
   getExpensesByUserId(userId: Int!): ExpenseListDto!
 }
 
 type Mutation {
+  """create a new user"""
   createUser(createUserData: CreateUserInput!): User!
+
+  """update the email of a user"""
   updateUserEmail(userEmailData: UpdateUserEmailInput!): User!
+
+  """create an expense for a user"""
   createExpense(createExpenseData: CreateExpenseInput!): Expense!
+
+  """delete an expense id"""
   deleteExpense(id: Int!): Expense!
 }
 
