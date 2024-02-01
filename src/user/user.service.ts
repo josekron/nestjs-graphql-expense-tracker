@@ -11,9 +11,9 @@ export class UserService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async getUsers(): Promise<User[]> {
+  async getUsers(includeExpenses: boolean): Promise<User[]> {
     const users: User[] = await this.usersRepository.find({
-      relations: ['expenses'],
+      relations: includeExpenses ? ['expenses'] : [],
     });
     return users;
   }

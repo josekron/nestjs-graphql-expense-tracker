@@ -2,6 +2,7 @@ import { Resolver, Query, Args, Int, Mutation } from '@nestjs/graphql';
 import { User } from './user.entity';
 import { CreateUserInput, UpdateUserEmailInput } from './user.input';
 import { UserService } from './user.service';
+import { FieldMap } from '@jenyus-org/nestjs-graphql-utils';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -16,8 +17,9 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-  async getUsers(): Promise<User[]> {
-    const users: User[] = await this.userService.getUsers();
+  async getUsers(@FieldMap() fieldMap: typeof FieldMap): Promise<User[]> {
+    const includeExpenses = fieldMap['getUsers'].expenses ? true : false;
+    const users: User[] = await this.userService.getUsers(includeExpenses);
     return users;
   }
 

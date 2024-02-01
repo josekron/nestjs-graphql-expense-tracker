@@ -14,7 +14,7 @@ Therefore, I created this repository with the purpose of having a **full backend
 - E2E Tests with Jest
 - Docker-compose to run the app and the database
 
-> **Note:** `vitest` has an [unsolved issue](https://github.com/vitejs/vite/issues/7879) with GraphQL. Therefore, I replaced vitest with Jest.
+> **Note:** `vitest` has an [unsolved issue](https://github.com/vitejs/vite/issues/7879) with supertest + GraphQL. Therefore, I replaced vitest with Jest.
 
 ## How to run it
 
