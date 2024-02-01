@@ -43,4 +43,10 @@ export class UserResolver {
     );
     return user;
   }
+
+  // @ResolveField()
+  // async expenses(@Parent() user: User) {
+  //   const { id } = user;
+  //   const expenses = await expenseService.getExpensesByUserId(id);
+  // }
 }
