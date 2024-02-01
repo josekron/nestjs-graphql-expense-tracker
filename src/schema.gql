@@ -1,0 +1,55 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Expense {
+  id: Int!
+  name: String!
+  description: String
+  total: String!
+  user: User!
+}
+
+type User {
+  id: Int!
+  email: String!
+  firstName: String!
+  lastName: String
+  expenses: [Expense!]!
+}
+
+type ExpenseListDto {
+  expenses: [Expense!]!
+  total: Float!
+}
+
+type Query {
+  getUserById(id: Int!): User
+  getUsers: [User!]!
+  getExpensesByUserId(userId: Int!): ExpenseListDto!
+}
+
+type Mutation {
+  createUser(createUserData: CreateUserInput!): User!
+  updateUserEmail(userEmailData: UpdateUserEmailInput!): User!
+  createExpense(createExpenseData: CreateExpenseInput!): Expense!
+  deleteExpense(id: Int!): Expense!
+}
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String
+}
+
+input UpdateUserEmailInput {
+  userId: Float!
+  email: String!
+}
+
+input CreateExpenseInput {
+  user: Int!
+  name: String! = "false"
+  description: String = "false"
+  total: String! = "false"
+}
