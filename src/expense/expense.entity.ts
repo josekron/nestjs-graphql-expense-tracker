@@ -29,8 +29,8 @@ export class Expense {
   total: string;
 
   @ManyToOne(() => User, (user) => user.expenses)
-  @Field(() => User, { nullable: false })
-  user: number;
+  @Field(() => User)
+  user: User;
 
   @CreateDateColumn()
   @IsDate()

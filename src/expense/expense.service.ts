@@ -23,10 +23,11 @@ export class ExpenseService {
    *
    */
   async getExpensesByUserId(userId: number): Promise<Expense[]> {
-    const expenses: Expense[] = await this.expenseRepository.find({
-      where: { user: userId },
-      relations: ['user'],
-    });
+    const expenses: Expense[] = await this.expenseRepository
+      .createQueryBuilder('user_expenses')
+      .leftJoinAndSelect('user_expenses.user', 'graph_users')
+      .where('user_expenses.userId = :userId', { userId })
+      .getMany();
 
     return expenses;
   }
@@ -44,11 +45,15 @@ export class ExpenseService {
       });
     }
 
-    const newExpense: Expense =
-      this.expenseRepository.create(createExpenseData);
-    const savedExpense: Expense = await this.expenseRepository.save(newExpense);
+    let expenseObject = {
+      ...createExpenseData,
+      user: user,
+    };
 
-    return savedExpense;
+    const newExpense: Expense = this.expenseRepository.create(expenseObject);
+    await this.expenseRepository.save(newExpense);
+
+    return newExpense;
   }
 
   async deleteExpense(id: number): Promise<Expense> {

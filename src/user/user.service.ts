@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { CreateUserInput, UpdateUserEmailInput } from './user.input';
+import { CreateUserInput } from './user.input';
 import { GraphQLError } from 'graphql/error/GraphQLError';
 
 @Injectable()
@@ -11,17 +11,14 @@ export class UserService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async getUsers(includeExpenses: boolean): Promise<User[]> {
-    const users: User[] = await this.usersRepository.find({
-      relations: includeExpenses ? ['expenses'] : [],
-    });
+  async getUsers(): Promise<User[]> {
+    const users: User[] = await this.usersRepository.find();
     return users;
   }
 
   async getUserById(id: number): Promise<User> {
     const user: User = await this.usersRepository.findOne({
       where: { id },
-      relations: ['expenses'],
     });
     return user;
   }

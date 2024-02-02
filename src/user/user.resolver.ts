@@ -1,12 +1,23 @@
-import { Resolver, Query, Args, Int, Mutation } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  Int,
+  Mutation,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { User } from './user.entity';
 import { CreateUserInput, UpdateUserEmailInput } from './user.input';
 import { UserService } from './user.service';
-import { FieldMap } from '@jenyus-org/nestjs-graphql-utils';
+import { ExpenseService } from '../expense/expense.service';
 
 @Resolver((of) => User)
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private expenseService: ExpenseService,
+  ) {}
 
   @Query(() => User, { description: 'return the user id' })
   async getUserById(
@@ -17,12 +28,24 @@ export class UserResolver {
   }
 
   @Query(() => [User], { description: 'return all users' })
-  async getUsers(@FieldMap() fieldMap: typeof FieldMap): Promise<User[]> {
-    const includeExpenses: boolean = fieldMap['getUsers'].expenses
-      ? true
-      : false;
-    const users: User[] = await this.userService.getUsers(includeExpenses);
+  async getUsers(): Promise<User[]> {
+    const users: User[] = await this.userService.getUsers();
     return users;
+  }
+
+  /**
+   * We are adding a resolve to the expenses field of the User
+   *
+   * In this case, this is not the most optimised way when calling to getUsers()
+   * because we are calling to this resolve for each user. Therefore, it would
+   * make more sense to include the relation 'expenses' when querying the database
+   * for all users.
+   */
+  @ResolveField()
+  async expenses(@Parent() user: User) {
+    const { id } = user;
+    const expenses = await this.expenseService.getExpensesByUserId(id);
+    return expenses;
   }
 
   @Mutation(() => User, { description: 'create a new user' })
@@ -43,10 +66,4 @@ export class UserResolver {
     );
     return user;
   }
-
-  // @ResolveField()
-  // async expenses(@Parent() user: User) {
-  //   const { id } = user;
-  //   const expenses = await expenseService.getExpensesByUserId(id);
-  // }
 }
